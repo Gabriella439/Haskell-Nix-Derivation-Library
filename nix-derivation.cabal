@@ -2,7 +2,7 @@ Name: nix-derivation
 Version: 1.0.0
 Cabal-Version: >=1.8.0.2
 Build-Type: Simple
-Tested-With: GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.3, GHC == 8.0.2
+Tested-With: GHC == 7.8.4, GHC == 7.10.3, GHC == 8.0.2
 License: BSD3
 License-File: LICENSE
 Copyright: 2017 Gabriel Gonzalez
