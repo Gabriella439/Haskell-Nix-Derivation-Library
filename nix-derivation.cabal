@@ -30,7 +30,7 @@ Library
     Build-Depends:
         base            >= 4.6.0.0  && < 5   ,
         attoparsec      >= 0.12.0.0 && < 0.14,
-        containers                     < 0.6 ,
+        containers                     < 0.7 ,
         deepseq         >= 1.4.0.0  && < 1.5 ,
         system-filepath >= 0.3.1    && < 0.5 ,
         text            >= 0.8.0.0  && < 1.3 ,
