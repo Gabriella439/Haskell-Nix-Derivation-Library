@@ -14,7 +14,6 @@ module Nix.Derivation.Types
 import Control.DeepSeq (NFData)
 import Data.Map (Map)
 import Data.Set (Set)
-import Data.Text (Text)
 import Data.Vector (Vector)
 import GHC.Generics (Generic)
 

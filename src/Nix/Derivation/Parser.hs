@@ -13,7 +13,6 @@ module Nix.Derivation.Parser
 
 import Data.Attoparsec.Text.Lazy (Parser)
 import Data.Map (Map)
-import Data.Monoid ((<>))
 import Data.Set (Set)
 import Data.Text (Text)
 import Data.Vector (Vector)
