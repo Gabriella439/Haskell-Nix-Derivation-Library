@@ -9,9 +9,13 @@ module Main where
 import Data.Text (Text)
 import Data.Vector (Vector)
 import System.FilePath
-import Nix.Derivation (Derivation(..), DerivationOutput(..))
+import Nix.Derivation
+    ( Derivation(..)
+    , DerivationInputs(..)
+    , DerivationOutput(..)
+    )
 import Prelude hiding (FilePath, either)
-import Test.QuickCheck (Arbitrary(..))
+import Test.QuickCheck (Arbitrary(..), Gen, oneof)
 
 import qualified Data.Attoparsec.Text.Lazy
 import qualified Data.Text
@@ -26,25 +30,47 @@ instance Arbitrary Text where
 instance Arbitrary a => Arbitrary (Vector a) where
     arbitrary = fmap Data.Vector.fromList arbitrary
 
-instance Arbitrary (DerivationOutput FilePath Text) where
+instance Arbitrary (DerivationInputs FilePath Text) where
     arbitrary = do
-        path     <- arbitrary
-        hashAlgo <- arbitrary
-        hash     <- arbitrary
-        return (DerivationOutput {..})
+        drvs <- arbitrary
+        srcs <- arbitrary
+        pure DerivationInputs {..}
 
-instance Arbitrary (Derivation FilePath Text) where
+instance Arbitrary (DerivationOutput FilePath) where
+    arbitrary = oneof
+      [ derivationOutput
+      , fixedDerivationOutput
+      , contentAddressedDerivationOutput
+      ]
+
+derivationOutput :: Gen (DerivationOutput FilePath)
+derivationOutput = do
+  path     <- arbitrary
+  return (DerivationOutput {..})
+
+fixedDerivationOutput :: Gen (DerivationOutput FilePath)
+fixedDerivationOutput = do
+  path     <- arbitrary
+  hashAlgo <- arbitrary
+  hash     <- arbitrary
+  return (FixedDerivationOutput {..})
+
+contentAddressedDerivationOutput :: Gen (DerivationOutput FilePath)
+contentAddressedDerivationOutput = do
+  hashAlgo <- arbitrary
+  return (ContentAddressedDerivationOutput {..})
+
+instance Arbitrary (Derivation FilePath Text Text DerivationOutput DerivationInputs) where
     arbitrary = do
         outputs   <- arbitrary
-        inputDrvs <- arbitrary
-        inputSrcs <- arbitrary
+        inputs    <- arbitrary
         platform  <- arbitrary
         builder   <- arbitrary
         args      <- arbitrary
         env       <- arbitrary
-        return (Derivation {..})
+        pure Derivation {..}
 
-property :: Derivation FilePath Text -> Bool
+property :: Derivation FilePath Text Text DerivationOutput DerivationInputs -> Bool
 property derivation0 = either == Right derivation0
   where
     builder = Nix.Derivation.buildDerivation derivation0
