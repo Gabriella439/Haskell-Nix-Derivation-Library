@@ -34,7 +34,7 @@ Library
         deepseq         >= 1.4.0.0  && < 1.6 ,
         text            >= 0.8.0.0  && < 2.2 ,
         vector                         < 0.14,
-        filepath                       < 1.5
+        filepath                       < 1.6
     Exposed-Modules:
         Nix.Derivation
     Other-Modules:
@@ -80,7 +80,7 @@ Test-Suite property
         QuickCheck                     < 2.16,
         text                                 ,
         vector                         < 0.14,
-        filepath                       < 1.5
+        filepath                       < 1.6
 
 Benchmark benchmark
     Default-Language: Haskell2010
