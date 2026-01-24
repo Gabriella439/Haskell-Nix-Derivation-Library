@@ -55,9 +55,31 @@ buildDerivationWith filepath string (Derivation {..}) =
         <>  ","
         <>  filepath path
         <>  ","
+        <>  "\"\""
+        <>  ","
+        <>  "\"\""
+        <>  ")"
+
+    keyValue0 (key, FixedDerivationOutput {..}) =
+            "("
+        <>  string key
+        <>  ","
+        <>  filepath path
+        <>  ","
         <>  string hashAlgo
         <>  ","
         <>  string hash
+        <>  ")"
+
+    keyValue0 (key, ContentAddressedDerivationOutput {..}) =
+            "("
+        <>  string key
+        <>  ","
+        <>  mempty
+        <>  ","
+        <>  string hashAlgo
+        <>  ","
+        <>  "\"\""
         <>  ")"
 
     keyValue1 (key, value) =

@@ -34,6 +34,9 @@ listOf element = do
     "]"
     return es
 
+optional :: Parser a -> Parser (Maybe a)
+optional p = Data.Attoparsec.Text.Lazy.option Nothing (Just <$> p)
+
 -- | Parse a derivation
 parseDerivation :: Parser (Derivation FilePath Text)
 parseDerivation = parseDerivationWith filepathParser textParser
@@ -48,13 +51,14 @@ parseDerivationWith filepath string = do
             "("
             key <- string
             ","
-            path <- filepath
+            path <- optional filepath
             ","
-            hashAlgo <- string
+            hashAlgo <- optional string
             ","
-            hash <- string
+            hash <- optional string
             ")"
-            return (key, DerivationOutput {..})
+            drvOutput <- derivationOutput path hashAlgo hash
+            return (key, drvOutput)
     outputs <- mapOf keyValue0
 
     ","
@@ -98,6 +102,12 @@ parseDerivationWith filepath string = do
     ")"
 
     return (Derivation {..})
+
+derivationOutput :: (Ord fp, Ord txt) => Maybe fp -> Maybe txt -> Maybe txt -> Parser (DerivationOutput fp txt)
+derivationOutput (Just path) Nothing Nothing = return DerivationOutput {..}
+derivationOutput (Just path) (Just hashAlgo) (Just hash) = return FixedDerivationOutput {..}
+derivationOutput Nothing (Just hashAlgo) Nothing = return ContentAddressedDerivationOutput {..}
+derivationOutput _ _ _ = fail "bad output in derivation"
 
 textParser :: Parser Text
 textParser = do
