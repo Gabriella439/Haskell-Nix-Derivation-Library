@@ -20,6 +20,7 @@ Category: System
 Extra-Source-Files:
     tests/example0.drv
     tests/example1.drv
+    tests/example-ca.drv
 Source-Repository head
     Type: git
     Location: https://github.com/Gabriella439/Haskell-Nix-Derivation-Library

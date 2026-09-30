@@ -136,6 +136,12 @@ filepathParser = do
     text <- textParser
     let str = Data.Text.unpack text
     case (Data.Text.uncons text, System.FilePath.isValid str) of
+        -- An empty path is a floating content-addressed or deferred output
+        -- (`("out","","r:sha256","")` / `("out","","","")`); the store path is
+        -- only assigned after realisation. Accept it instead of failing so
+        -- consumers can parse CA derivations. https://github.com/Gabriella439/Haskell-Nix-Derivation-Library/issues/28
+        (Nothing, _) -> do
+            return str
         (Just ('/', _), True) -> do
             return str
         _ -> do
