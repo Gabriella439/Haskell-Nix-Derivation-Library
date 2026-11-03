@@ -76,8 +76,9 @@ Test-Suite property
     Build-Depends:
         base            >= 4.6.0.0  && < 5   ,
         attoparsec      >= 0.12.0.0 && < 0.15,
+        containers                           ,
         nix-derivation                       ,
-        QuickCheck                     < 2.16,
+        QuickCheck                     < 2.20,
         text                                 ,
         vector                         < 0.14,
         filepath                       < 1.6
